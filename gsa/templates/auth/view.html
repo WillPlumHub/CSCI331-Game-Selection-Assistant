@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}View{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2>{{g.user['name']}}</h2>
+<p> Hello {{g.user['name']}} your unique id is {{g.user['id']}}</p>
+{% endblock %}
