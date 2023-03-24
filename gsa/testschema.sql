@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS game;
 DROP TABLE IF EXISTS collection;
 
 CREATE TABLE user (
@@ -21,7 +22,8 @@ CREATE TABLE collection (
 	gameId 		INTEGER NOT NULL,
 	userId 		INTEGER NOT NULL,
 	dateAdded	INTEGER NOT NULL,
-	rating		INTEGER NOT NULL,
+	rating		INTEGER,
+	completed	INTEGER,
 
 	FOREIGN KEY (userId) REFERENCES user(id),
 	FOREIGN KEY (gameId) REFERENCES game(id),
