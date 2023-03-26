@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %} {{ g.game['name'] }} {% endblock %}</h1>
+{% endblock %}
+
+{% block content%}
+<ul>
+	<li> <img src="{{ g.game['image_url'] }}"> </li>
+	<li> Playtime: {{ g.game['playtime'] }} </li>
+</ul>
+
+{% if g.user != None %}
+<form method="POST">
+
+	{% if not g.in_collection %}
+	<input type='hidden' name='do' value='add'>
+	<input type='submit' value='Add'>
+	{% else %}
+	<input type='hidden' name='do' value='remove'>
+	<input type='submit' value='Remove'>
+	{% endif %}
+</form>
+{% endif %}
+
+{% endblock %}

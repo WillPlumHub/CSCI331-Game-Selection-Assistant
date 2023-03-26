@@ -3,8 +3,10 @@ Scripts
 pyvenv.cfg
 *.pyc
 __pycache__/
+gsa/__pycache__/
 
 instance/
+var/
 
 .pytest_cache/
 .coverage

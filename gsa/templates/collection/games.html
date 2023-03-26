@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %}Collection{% endblock %}</h1>
+{% endblock %}
+
+{% block content%}
+<table>
+	<tr>
+		<th> Game Image </th>
+		<th> Game Name </th>
+		<th> Play Time </th>
+		<th> Completed </th>
+	</tr>
+
+	{% for item in g.collection %}
+	<tr>
+		<td> <img src="{{ item['image_url'] }}" alt="{{ item['name'] }}"> </td>
+		<td> {{ item['name'] }} </td>
+		<td> {{ item['playtime'] }} </td>
+		<td> {{ item['completed'] }} </td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
