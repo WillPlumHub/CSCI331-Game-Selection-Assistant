@@ -22,6 +22,9 @@ def create_app(test_config=None):
 	from . import game
 	app.register_blueprint(game.bp)
 	
+	from . import search
+	app.register_blueprint(search.bp)
+
 	from . import collection
 	app.register_blueprint(collection.bp)
 

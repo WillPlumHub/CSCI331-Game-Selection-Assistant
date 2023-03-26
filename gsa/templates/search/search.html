@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h1>{% block title %} Search {% endblock %}</h1>
+{% endblock %}
+
+{% block content%}
+<table>
+	<tr>
+		<th> Game Image </th>
+		<th> Game Name </th>
+	</tr>
+
+	{% for item in g.results %}
+	<tr>
+		<td> <img src="{{ item['image_url'] }}" alt="{{ item['name'] }}"> </td>
+		<td> <a href="{{ url_for('game.view', gameId=item['id']) }}"> {{ item['name'] }} </a> </td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
