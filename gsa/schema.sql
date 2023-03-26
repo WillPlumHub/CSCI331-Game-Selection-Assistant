@@ -4,8 +4,9 @@ DROP TABLE IF EXISTS collection;
 
 CREATE TABLE user (
 	id 			INTEGER NOT NULL,
-	name 		TEXT UNIQUE NOT NULL,
-    password 	TEXT NOT NULL,
+	email		TEXT UNIQUE NOT NULL,
+	password 	TEXT NOT NULL,
+	name 		TEXT NOT NULL,
 
     PRIMARY KEY (id)
 );
@@ -13,7 +14,8 @@ CREATE TABLE user (
 CREATE TABLE game (
 	id			INTEGER UNIQUE NOT NULL,
 	name 		TEXT NOT NULL,
-	playtime	INTEGER,
+	image_url,	TEXT,
+	playtime	REAL,
 
 	PRIMARY KEY (id)
 );
