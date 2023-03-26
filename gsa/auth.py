@@ -1,49 +1,42 @@
 import functools
-
-from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
-)
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 
 from .db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='')
 
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
 
 	if request.method == 'POST':
-		username = request.form['username']
-		password = request.form['password']
 		db = get_db()
 		error = None
-		
-		if not username:
-			error = 'Username is required.'
-		elif not password:
+
+		email = request.form['email']
+		password = request.form['password']
+		name = request.form['name']
+
+		if email is None:
+			error = 'Email is required.'
+		elif password is None:
 			error = 'Password is required.'
+		elif name is None:
+			error = 'Name is required.'
 			
 		if error is None:
+
 			try:
-				db.execute(
-					"INSERT INTO user (name, password) VALUES (?, ?)",
-					[username, generate_password_hash(password)]
-				)
-				db.commit()
+				user = db.add_user(email, password, name)
+				
+				if user is None:
+					error='Failed to register account'
 
-				user = db.execute(
-					'select * from user where name = ?', 
-					[username]
-				).fetchone()
-
-				if not check_password_hash(user['password'], password):
-					error='Failed to create user'
-
-			except db.IntegrityError:
-				error = f"User {username} is already registered."
+			except Exception as e:
+				error = "Failed to register account"
 			else:
-				session['user_id'] = user['id']
-				return redirect(url_for("auth.view"))
+				set_session(user)
+				return redirect(url_for("collection.view"))
 				
 		flash(error)
 		
@@ -54,24 +47,20 @@ def register():
 def login():
 
 	if request.method == 'POST':
-		username = request.form['username']
-		password = request.form['password']
 		db = get_db()
 		error = None
-		user = db.execute(
-			'select * from user where name = ?', 
-			[username]
-		).fetchone()
-		
+
+		email = request.form['email']
+		password = request.form['password']
+
+		user = db.get_user(email=email, password=password)
+
 		if user is None:
-			error = 'Incorrect username.'
-		elif not check_password_hash(user['password'], password):
-			error = 'Incorrect password.'
+			error = 'Login failed'
 			
 		if error is None:
-			session.clear()
-			session['user_id'] = user['id']
-			return redirect(url_for('auth.view'))
+			set_session(user)
+			return redirect(url_for('collection.view'))
 			
 		flash(error)
 		
@@ -95,12 +84,16 @@ def view():
 
 @bp.before_app_request
 def load_logged_in_user():
-	user_id = session.get('user_id')
+	db = get_db()
+	userId = session.get('user.id')
 
-	if user_id is None:
+	if userId is None:
 		g.user = None
 	else:
-		g.user = get_db().execute(
-			'select * from user where id=?', 
-			[user_id]
-		).fetchone()	
+		g.user = db.get_user(id=userId)
+
+
+def set_session(user):
+	session.clear()
+	session['user.id'] = user['id']
+	g.user = user
