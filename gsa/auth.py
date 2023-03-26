@@ -73,8 +73,8 @@ def logout():
 	return redirect(url_for('auth.login'))
 
 
-@bp.route('/view')
-def view():
+@bp.route('/account')
+def account():
 
 	if(g.user is None):
 		return redirect(url_for('auth.login'))
