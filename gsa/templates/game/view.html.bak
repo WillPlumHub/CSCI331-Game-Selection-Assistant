@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <link rel="stylesheet" href="../css/gameScreenStyle.css">
+    <link rel="stylesheet" href="../css/viewStyle.css">
 	<h1>{% block title %} {{ g.game['name'] }} {% endblock %}</h1>
 {% endblock %}
 
@@ -43,7 +43,7 @@
 	</div>
 
 	<div class="image">
-		<img src="Sonic_06.jpg" alt="{{ g.game['image_url'] }'s box art">
+		<img src="{{ g.game['image_url'] }" alt="{{ g.game['name'] }'s box art">
 	</div>
 
 </div>
